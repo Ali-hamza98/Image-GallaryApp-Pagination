@@ -7,10 +7,15 @@ export default function App() {
 
   // fetch images
   const fetchImages = async () => {
-    const res = await axios.get(
-      `https://picsum.photos/v2/list?page=${page}&limit=6`,
-    );
-    setImages(res.data);
+    try {
+      const res = await axios.get(
+        `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=6`,
+      );
+      setImages(res.data);
+    } catch (error) {
+      console.error('Error fetching images:', error);
+      setImages([]);
+    }
   };
 
   useEffect(() => {
@@ -28,12 +33,14 @@ export default function App() {
             className='bg-white  rounded-xl shadow-md overflow-hidden'
           >
             <img
-              src={img.download_url}
-              alt={img.author}
+              src={img.thumbnailUrl}
+              alt={img.title}
               className='h-52 w-full object-cover'
             />
             <div className='p-3'>
-              <p className='font-semibold text-center'>{img.author}</p>
+              <p className='font-semibold text-center text-sm line-clamp-2'>
+                {img.title}
+              </p>
               <p className='text-sm text-gray-500 text-center'>ID: {img.id}</p>
             </div>
           </div>
